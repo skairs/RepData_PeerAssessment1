@@ -10,7 +10,7 @@ The data for this assignment can be downloaded from the course web site:
 * Dataset: [Activity monitoring data][datalink] (52K)
 
 The variables included in this dataset are:  
-* **steps**: Number of steps taking in a 5-minute interval (missing values are coded as `NA`)  
+* **steps**: Number of steps taken in a 5-minute interval (missing values are coded as `NA`)  
 * **date**: The date on which the measurement was taken in YYYY-MM-DD format  
 * **interval**: Identifier for the 5-minute interval in which measurement was taken  
 
@@ -98,7 +98,7 @@ numNA
 
 Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
-Fillin `NA` values with mean for that 5-minute interval:  
+Fill-in `NA` values with mean for that 5-minute interval:  
 
 ```r
 ## create a list of rows with data to impute
@@ -142,7 +142,17 @@ The **median** total number of steps per day is 1.0766 &times; 10<sup>4</sup>.
 
 Do these values differ from the estimates from the first part of the assignment?  
 **The median value for the fill-in data has increased by 1 step per day.**  
+
 Please see summary table below:
+
+```r
+summary1 <- data.frame(dataset=c("data", "fillin_data"), 
+            mean=c(mean_per_day, mean_per_day_fillin), 
+            median=c(median_per_day, median_per_day_fillin))
+kable(summary1, digits = 1)
+```
+
+
 
 |dataset     |  mean| median|
 |:-----------|-----:|------:|
