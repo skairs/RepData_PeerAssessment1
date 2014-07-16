@@ -62,7 +62,7 @@ Calculate the mean number of steps taken during each interval:
 mean_per_interval <- aggregate(steps ~ interval, data=data, mean)
 ```
 
-Make a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)  
+Make a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).  
 
 ```r
 plot(mean_per_interval$interval, mean_per_interval$steps, type="l",
@@ -141,19 +141,48 @@ The **mean** total number of steps per day is 1.0766 &times; 10<sup>4</sup>.
 The **median** total number of steps per day is 1.0766 &times; 10<sup>4</sup>.
 
 Do these values differ from the estimates from the first part of the assignment?  
-**The median value for the fillin data has increased by 1 step per day.**  
+**The median value for the fill-in data has increased by 1 step per day.**  
 Please see summary table below:
 
-|data        |  mean| median|
+|dataset     |  mean| median|
 |:-----------|-----:|------:|
 |data        | 10766|  10765|
 |fillin_data | 10766|  10766|
 
+What is the impact of imputing missing data on the estimates of the total daily number of steps? 
+
+```r
+ttest <- t.test(sum_per_day$steps, sum_per_day_fillin$steps)
+ttest$p.value
+```
+
+```
+## [1] 1
+```
+There is no statistically significant impact on the estimates of the total daily number of steps.
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
+Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.  
+
+```r
+fillin_data$weekday <- weekdays(fillin_data$date)
+fillin_data$group <- "weekday"
+filter <- grep("^S", fillin_data$weekday)
+fillin_data[filter,]$group <- "weekend"
+```
+Make a panel plot containing a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 
+```r
+facet_plot_data <- aggregate(steps ~ group + interval, data=fillin_data, mean)
+
+library(ggplot2)
+qplot(interval, steps, data=facet_plot_data, geom="line", facets=group ~ .)
+```
+
+![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16.png) 
 
 [datalink]: https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip
 [courselink]: https://class.coursera.org/repdata-004/
